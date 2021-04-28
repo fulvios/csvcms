@@ -1,0 +1,7 @@
+cl /EHsc /c csvcms.cpp
+link /DLL /OUT:csvcms.dll csvcms.obj /DEF:csvcms.def
+
+cl /EHsc /c cgo_csvcms_capi.cpp
+link /DLL /OUT:cgocsvcmscapi.dll cgo_csvcms_capi.obj /DEF:cgo_csvcms_capi.def
+
+dlltool -dllname cgocsvcmscapi.dll --def cgo_csvcms_capi.def --output-lib libcgocsvcmscapi.a

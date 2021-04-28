@@ -1,2 +1,2 @@
 # csvcms
-cgo api
+csvcms

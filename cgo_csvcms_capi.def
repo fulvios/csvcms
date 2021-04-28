@@ -1,0 +1,16 @@
+LIBRARY cgocsvcmscapi.dll
+EXPORTS
+CSV_CMS_Init
+cgo_CMS_Init
+cgo_CMS_LogonServer
+cgo_CMS_GetFirstNode
+cgo_CMS_GetFirstChildNode
+New_CMS_NodeData
+cgo_CMS_NodeData_cName
+cgo_CMS_NodeData_cName_size
+cgo_Get_CMS_Node_Handle
+cgo_CMS_GetCameraStatus
+cgo_CMS_GetNextNode
+RecursionAllCMSNode
+Debug
+GetCameraStream
