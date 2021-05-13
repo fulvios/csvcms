@@ -62,6 +62,13 @@ CMS_NodeData* New_CMS_NodeData()
 	return new CMS_NodeData;
 }
 
+// struct CSVCMS
+// {
+// 	SERVER_HANDLE hServer,
+// 	CAMERA_HANDLE hCamera,
+	
+// };
+
 struct CSV_CMS_NodeData : CMS_NodeData
 {
 	~CSV_CMS_NodeData() {}
@@ -75,23 +82,26 @@ NODE_HANDLE cgo_Get_CMS_Node_Handle(cgo_CMS_NodeData pData)
 
 int cgo_CMS_GetCameraStatus(CAMERA_HANDLE hCamera, int *pnStatus)
 {
-	return  CMS_GetCameraStatus(hCamera, pnStatus);
+	return  CMS_GetCameraStatus(hCamera, pnStatus); 
 }
 
-void RecursionAllCMSNode(cgo_CMS_NodeData pNode)
+void RecursionAllCMSNode(SERVER_HANDLE hServer, cgo_CMS_NodeData pNode)
 {
 	CMS_NodeData node;
 
 	if(CMS_GetFirstChildNode(pNode->hNode, &node))
 	{
 		Debug(&node);
-		RecursionAllCMSNode(&node);
+		RecursionAllCMSNode(hServer, &node);
+		GetCameraStream(hServer, &node);
 	}
 
 	if(CMS_GetNextNode(pNode->hNode, &node))
 	{
 		Debug(&node);
-		RecursionAllCMSNode(&node);
+		RecursionAllCMSNode(hServer, &node);
+
+		GetCameraStream(hServer, &node);
 	}
 }
 
@@ -111,11 +121,23 @@ void GetCameraStream(SERVER_HANDLE hServer, cgo_CMS_NodeData pNode)
 			char cName[64];
 			CMS_GetCameraName(cSet.pHCamera[0], cName, 64);
 			CMSLog(cName);
+			cgo_CMS_LiveView(cSet.pHCamera[0]);
 		}
 		CMSLog("Success get Camera handle");
 		/* code */
 	} else {
 		CMSLog("Failed get Camera handle");
+	}
+}
+
+void cgo_CMS_LiveView(CAMERA_HANDLE hCamera)
+{
+	CMS_LiveViewSet set;
+	set.bDeferConnectStream = 1;
+	HVideoView hVideoView = CMS_OpenLiveView(hCamera, NULL, &set, NULL);
+	if(hVideoView)
+	{
+		printf("%s\n", "hVideoView is opened.");
 	}
 }
 
